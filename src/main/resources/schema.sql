@@ -1,23 +1,23 @@
 CREATE TABLE IF NOT EXISTS Organization (
     id         INTEGER               COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
     name       VARCHAR(255) NOT NULL COMMENT 'Сокращенное название организации',
-	full_name  VARCHAR(255) NOT NULL COMMENT 'Полное название организации',
-	inn        VARCHAR(12)  NOT NULL COMMENT 'ИНН' UNIQUE,
-	kpp        VARCHAR(9)   NOT NULL COMMENT 'КПП',
-	address    VARCHAR(255) NOT NULL COMMENT 'Юридический адрес',
-	phone      VARCHAR(16)           COMMENT 'Телефон',
+    full_name  VARCHAR(255) NOT NULL COMMENT 'Полное название организации',
+    inn        VARCHAR(12)  NOT NULL COMMENT 'ИНН' UNIQUE,
+    kpp        VARCHAR(9)   NOT NULL COMMENT 'КПП',
+    address    VARCHAR(255) NOT NULL COMMENT 'Юридический адрес',
+    phone      VARCHAR(16)           COMMENT 'Телефон',
     is_active  BOOLEAN  DEFAULT true COMMENT 'Статус',
-	version    INTEGER      NOT NULL COMMENT 'Служебное поле hibernate'
+    version    INTEGER      NOT NULL COMMENT 'Служебное поле hibernate'
 );
 
 CREATE TABLE IF NOT EXISTS Office (
     id         INTEGER               COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
-	org_id     INTEGER      NOT NULL COMMENT 'Идентификатор организации',
+    org_id     INTEGER      NOT NULL COMMENT 'Идентификатор организации',
     name       VARCHAR(255) NOT NULL COMMENT 'Название офиса',
-	address    VARCHAR(255) NOT NULL COMMENT 'Адрес офиса',
-	phone      VARCHAR(16)           COMMENT 'Телефон',
+    address    VARCHAR(255) NOT NULL COMMENT 'Адрес офиса',
+    phone      VARCHAR(16)           COMMENT 'Телефон',
     is_active  BOOLEAN DEFAULT true  COMMENT 'Статус',
-	version    INTEGER      NOT NULL COMMENT 'Служебное поле hibernate'
+    version    INTEGER      NOT NULL COMMENT 'Служебное поле hibernate'
 );
 
 
@@ -25,31 +25,31 @@ CREATE TABLE IF NOT EXISTS User (
     id               INTEGER               COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
     office_id        INTEGER      NOT NULL COMMENT 'Идентификатор офиса',
     doc_id           INTEGER               COMMENT 'Идентификатор документа',
-	citizenship_code INTEGER               COMMENT 'Код гражданства',
-	first_name       VARCHAR(255) NOT NULL COMMENT 'Имя',
-	second_name      VARCHAR(255)          COMMENT 'Фамилия',
-	middle_name      VARCHAR(255)          COMMENT 'Отчество',
-	position         VARCHAR(255) NOT NULL COMMENT 'Должность',
-	phone            VARCHAR(16)           COMMENT 'Телефон',
+    citizenship_code INTEGER               COMMENT 'Код гражданства',
+    first_name       VARCHAR(255) NOT NULL COMMENT 'Имя',
+    second_name      VARCHAR(255)          COMMENT 'Фамилия',
+    middle_name      VARCHAR(255)          COMMENT 'Отчество',
+    position         VARCHAR(255) NOT NULL COMMENT 'Должность',
+    phone            VARCHAR(16)           COMMENT 'Телефон',
     is_identified    BOOLEAN DEFAULT false COMMENT 'Проверка проведена',
-	version          INTEGER      NOT NULL COMMENT 'Служебное поле hibernate'
+    version          INTEGER      NOT NULL COMMENT 'Служебное поле hibernate'
 );
 
 CREATE TABLE IF NOT EXISTS Doc (
     id     INTEGER              COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
     code   INTEGER     NOT NULL COMMENT 'Код документа',
-	number VARCHAR(50) NOT NULL COMMENT 'Номер документа',
-	date   DATE        NOT NULL COMMENT 'Дата документа',
+    number VARCHAR(50) NOT NULL COMMENT 'Номер документа',
+    date   DATE        NOT NULL COMMENT 'Дата документа',
 );
 
 CREATE TABLE IF NOT EXISTS Doc_type (
     code       INTEGER              COMMENT 'Код документа' PRIMARY KEY,
- 	name       VARCHAR(50) NOT NULL COMMENT 'Название документа',
+    name       VARCHAR(50) NOT NULL COMMENT 'Название документа',
 );
 
 CREATE TABLE IF NOT EXISTS Сitizenship (
     code       INTEGER              COMMENT 'Код страны' PRIMARY KEY,
-	name       VARCHAR(50) NOT NULL COMMENT 'Название страны',
+    name       VARCHAR(50) NOT NULL COMMENT 'Название страны',
 );
 
 CREATE INDEX IX_Organization_Name ON Organization(name);
