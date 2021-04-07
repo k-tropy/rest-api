@@ -1,7 +1,9 @@
 package ru.bolgov.bell;
 
+import org.springframework.boot.SpringApplication;
+
 public class Application {
     public static void main(String[] args) {
-        System.out.println("Hello world");
+        SpringApplication.run(Application.class, args);
     }
 }
