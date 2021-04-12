@@ -1,7 +1,7 @@
 package ru.bolgov.bell.organization.service;
 
 import org.springframework.validation.annotation.Validated;
-import ru.bolgov.bell.organization.dto.OrgDtoOutShort;
+import ru.bolgov.bell.organization.dto.OrganizationFullDto;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * Сервис
  */
 @Validated
-public interface OrgService {
+public interface OrganizationService {
 
-List<OrgDtoOutShort> organization();
+List<OrganizationFullDto> organization();
 }

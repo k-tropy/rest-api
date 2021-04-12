@@ -5,26 +5,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bolgov.bell.mapper.MapperFacade;
 import ru.bolgov.bell.organization.dao.OrganizationDao;
-import ru.bolgov.bell.organization.dto.OrgDtoOutShort;
+import ru.bolgov.bell.organization.dto.OrganizationFullDto;
 import ru.bolgov.bell.organization.entity.Organization;
 
 import java.util.List;
 
 @Service
-public class OrgServiceImpl implements OrgService{
+public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationDao dao;
     private final MapperFacade mapperFacade;
 
     @Autowired
-    public OrgServiceImpl(OrganizationDao dao, MapperFacade mapperFacade){
+    public OrganizationServiceImpl(OrganizationDao dao, MapperFacade mapperFacade){
         this.dao = dao;
         this.mapperFacade = mapperFacade;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrgDtoOutShort> organization() {
-        List<Organization> all = dao.all();
-        return mapperFacade.mapAsList(all, OrgDtoOutShort.class);
+    public List<OrganizationFullDto> organization() {
+        List<Organization> all = dao.loadAllOrganizations();
+        return mapperFacade.mapAsList(all, OrganizationFullDto.class);
     }
 }
