@@ -16,7 +16,6 @@ import java.util.List;
 @Repository
 public class DocTypeDaoImpl implements DocTypeDao{
 
-    @PersistenceContext
     private final EntityManager em;
 
     @Autowired

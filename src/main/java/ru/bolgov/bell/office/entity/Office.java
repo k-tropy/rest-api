@@ -66,12 +66,6 @@ public class Office {
     @JoinColumn(name = "org_id", nullable = false)
     private Organization organization;
 
-    /**
-     * Пустой конструктор для Hibernate
-     */
-    public Office() {
-    }
-
     public Integer getId() {
         return id;
     }

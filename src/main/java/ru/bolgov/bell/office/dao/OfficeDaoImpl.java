@@ -15,7 +15,6 @@ import java.util.List;
 @Repository
 public class OfficeDaoImpl implements OfficeDao{
 
-    @PersistenceContext
     private final EntityManager em;
 
     @Autowired

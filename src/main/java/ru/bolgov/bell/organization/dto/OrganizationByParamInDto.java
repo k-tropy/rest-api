@@ -7,8 +7,7 @@ public class OrganizationByParamInDto {
     @NotEmpty(message = "name cannot be null")
     public String name;
 
-    @Min(value = 10, message = "Inn must not be shorter than 10 characters" )
-    @Max(value = 12, message = "Inn must not be longer than 12 characters")
+    @Size(min = 10, max = 12, message = "Inn must be between than 10 and 12 characters")
     public String inn;
 
     public Boolean isActive;

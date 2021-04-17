@@ -15,7 +15,6 @@ import java.util.List;
 @Repository
 public class CitizenshipDaoImpl implements CitizenshipDao{
 
-    @PersistenceContext
     private final EntityManager em;
 
     @Autowired

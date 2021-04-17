@@ -25,12 +25,6 @@ public class Citizenship {
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
-    /**
-     * Пустой конструктор для Hibernate
-     */
-    public Citizenship() {
-    }
-
     public Integer getCode() {
         return code;
     }

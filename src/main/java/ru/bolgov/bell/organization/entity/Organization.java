@@ -70,17 +70,14 @@ public class Organization {
      * Статус организации(метка активности)
      */
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
-
-    /**
-     * Пустой конструктор для Hibernate
-     */
-    public Organization() {
-    }
-
+    private Boolean isActive;
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -131,11 +128,11 @@ public class Organization {
         this.phone = phone;
     }
 
-    public boolean getIsActive() {
+    public Boolean getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(boolean active) {
+    public void setIsActive(Boolean active) {
         isActive = active;
     }
 }

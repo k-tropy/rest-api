@@ -95,12 +95,6 @@ public class User {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Doc doc;
 
-    /**
-     * Пустой конструктор для Hibernate
-     */
-    public User() {
-    }
-
     public Integer getId() {
         return id;
     }

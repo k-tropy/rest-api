@@ -25,12 +25,6 @@ public class DocType {
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
-    /**
-     * Пустой конструктор для Hibernate
-     */
-    public DocType() {
-    }
-
     public Integer getCode() {
         return code;
     }
