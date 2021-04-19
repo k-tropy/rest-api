@@ -40,8 +40,8 @@ public class OrganizationDaoImpl implements OrganizationDao {
      * {@inheritDoc}
      */
     @Override
-    public List<Organization> loadOrganizationsByParam(Organization organization) {
-        CriteriaQuery<Organization> criteria = buildCriteria(organization);
+    public List<Organization> loadOrganizationsByParam(Organization organizationIn) {
+        CriteriaQuery<Organization> criteria = buildCriteria(organizationIn);
         TypedQuery<Organization> query = em.createQuery(criteria);
         return query.getResultList();
     }
@@ -71,18 +71,18 @@ public class OrganizationDaoImpl implements OrganizationDao {
         em.persist(organization);
     }
 
-    private CriteriaQuery<Organization> buildCriteria(Organization organization) {
+    private CriteriaQuery<Organization> buildCriteria(Organization organizationIn) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Organization> criteria = builder.createQuery(Organization.class);
         Root<Organization> organizationRoot = criteria.from(Organization.class);
 
-        Predicate mainPredicate = builder.equal(organizationRoot.get("name"), organization.getName());
-        if (organization.getInn() != null) {
-            Predicate innPredicate = builder.equal(organizationRoot.get("inn"), organization.getInn());
+        Predicate mainPredicate = builder.equal(organizationRoot.get("name"), organizationIn.getName());
+        if (organizationIn.getInn() != null) {
+            Predicate innPredicate = builder.equal(organizationRoot.get("inn"), organizationIn.getInn());
             mainPredicate = builder.and(mainPredicate, innPredicate);
         }
-        if (organization.getIsActive() != null) {
-            Predicate isActivePredicate = builder.equal(organizationRoot.get("isActive"), organization.getIsActive());
+        if (organizationIn.getIsActive() != null) {
+            Predicate isActivePredicate = builder.equal(organizationRoot.get("isActive"), organizationIn.getIsActive());
             mainPredicate = builder.and(mainPredicate, isActivePredicate);
         }
 
@@ -97,13 +97,13 @@ public class OrganizationDaoImpl implements OrganizationDao {
             organizationOld.setKpp(organizationNew.getKpp());
             organizationOld.setAddress(organizationNew.getAddress());
 
-            String phone = organizationNew.getPhone();
-            if (phone != null) {
-                organizationOld.setPhone(phone);
+            String phoneNew = organizationNew.getPhone();
+            if (phoneNew != null) {
+                organizationOld.setPhone(phoneNew);
             }
-            Boolean isActive = organizationNew.getIsActive();
-            if (isActive != null) {
-                organizationOld.setIsActive(isActive);
+            Boolean isActiveNew = organizationNew.getIsActive();
+            if (isActiveNew != null) {
+                organizationOld.setIsActive(isActiveNew);
             }
 
         }

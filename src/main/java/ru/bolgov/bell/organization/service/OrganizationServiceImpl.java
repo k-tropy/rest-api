@@ -14,15 +14,18 @@ import ru.bolgov.bell.organization.entity.Organization;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationDao dao;
-    private final MapperFacade mapperFacade;
+    private final MapperFacade mapper;
 
     @Autowired
-    public OrganizationServiceImpl(OrganizationDao dao, MapperFacade mapperFacade) {
+    public OrganizationServiceImpl(OrganizationDao dao, MapperFacade mapper) {
         this.dao = dao;
-        this.mapperFacade = mapperFacade;
+        this.mapper = mapper;
     }
 
     // TODO разобраться с     @Transactional(readOnly = true)
@@ -34,7 +37,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Transactional(readOnly = true)
     public List<OrganizationFullDto> organizations() {
         List<Organization> organizationsList = dao.loadAllOrganizations();
-        return mapperFacade.mapAsList(organizationsList, OrganizationFullDto.class);
+        return mapper.mapAsList(organizationsList, OrganizationFullDto.class);
     }
 
     /**
@@ -43,9 +46,9 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Transactional
     public List<OrganizationByParamOutDto> organizationsFilter(@Valid OrganizationByParamInDto organizationInDto) {
-        Organization organizationIn = mapperFacade.map(organizationInDto, Organization.class);
+        Organization organizationIn = mapper.map(organizationInDto, Organization.class);
         List<Organization> organizationsList = dao.loadOrganizationsByParam(organizationIn);
-        return mapperFacade.mapAsList(organizationsList, OrganizationByParamOutDto.class);
+        return mapper.mapAsList(organizationsList, OrganizationByParamOutDto.class);
     }
 
     /**
@@ -55,18 +58,18 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Transactional
     public OrganizationFullDto organizationById(Integer organizationId) {
         Organization organization = dao.loadOrganizationById(organizationId);
-        return mapperFacade.map(organization, OrganizationFullDto.class);
+        return mapper.map(organization, OrganizationFullDto.class);
 
     }
 
-//todo Разобраться как получать информацию назад? Успешно или не успешно прошло...
+//todo Разобраться как получать информацию назад? Успешно или не успешно прошло...По всей видимости это будет хандлер
     /**
      * {@inheritDoc}
      */
     @Override
     @Transactional
     public void updateOrganization(@Valid OrganizationFullDto organizationInDto) {
-        Organization organizationIn = mapperFacade.map(organizationInDto, Organization.class);
+        Organization organizationIn = mapper.map(organizationInDto, Organization.class);
         dao.updateOrganization(organizationIn);
     }
 
@@ -76,7 +79,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Transactional
     public void saveOrganization(@Valid OrganizationWithoutIdDto organizationInDto) {
-        Organization organizationIn = mapperFacade.map(organizationInDto, Organization.class);
+        Organization organizationIn = mapper.map(organizationInDto, Organization.class);
         dao.saveOrganization(organizationIn);
     }
 }

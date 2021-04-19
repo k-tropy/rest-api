@@ -72,6 +72,16 @@ public class Organization {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
+    /**
+     * Пустой конструктор для Hibernate
+     */
+    public Organization() {
+    }
+
+    public Organization(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }
