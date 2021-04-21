@@ -22,7 +22,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  * Контроллер для работы с организациями
  */
 @RestController
-@RequestMapping(value = "/organization", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/organization", produces = APPLICATION_JSON_VALUE)
 public class OrganizationController {
     private final OrganizationService service;
 
