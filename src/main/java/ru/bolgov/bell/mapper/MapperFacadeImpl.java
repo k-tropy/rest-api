@@ -1,14 +1,11 @@
 package ru.bolgov.bell.mapper;
 
-import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.MappingContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.bolgov.bell.doc.entity.Doc;
 import ru.bolgov.bell.guide.entity.Citizenship;
 import ru.bolgov.bell.guide.entity.DocType;
-import ru.bolgov.bell.office.dto.OfficeByParamInDto;
 import ru.bolgov.bell.office.dto.OfficeDtoWithOrgId;
 import ru.bolgov.bell.office.entity.Office;
 import ru.bolgov.bell.organization.entity.Organization;
@@ -54,8 +51,6 @@ public class MapperFacadeImpl implements MapperFacade {
         return mapperFactory.getMapperFacade().mapAsList(source, destinationClass);
     }
 
-    /*Возможно маппер нужно реализовать иначе. Но через кастомный маппер не получилось!*/
-
     /**
      * {@inheritDoc}
      */
@@ -94,15 +89,8 @@ public class MapperFacadeImpl implements MapperFacade {
 
 
     private User addOtherFieldsToUser(UserInDto sourse, User user) {
-        if (sourse.getOfficeId() != null) {
-            Office office = new Office();
-            office.setId(sourse.getOfficeId());
-            user.setOffice(office);
-        }
-
-        if (sourse.getDocCode()!=null||sourse.getDocName()!=null
-                ||sourse.getDocNumber()!=null||sourse.getDocDate()!=null) {
-            System.out.println(sourse.getDocCode()+" "+sourse.getDocName()+" "+sourse.getDocNumber()+" "+sourse.getDocDate());//!!!!!!!!!!Удалить
+        if (sourse.getDocCode() != null || sourse.getDocName() != null
+                || sourse.getDocNumber() != null || sourse.getDocDate() != null) {
             Doc doc = new Doc();
             doc.setDocType(new DocType());
             doc.getDocType().setCode(sourse.getDocCode());
@@ -112,7 +100,7 @@ public class MapperFacadeImpl implements MapperFacade {
             user.setDoc(doc);
         }
 
-        if(sourse.getCitizenshipCode()!=null) {
+        if (sourse.getCitizenshipCode() != null) {
             Citizenship citizenship = new Citizenship();
             citizenship.setCode(sourse.getCitizenshipCode());
             user.setCitizenship(citizenship);

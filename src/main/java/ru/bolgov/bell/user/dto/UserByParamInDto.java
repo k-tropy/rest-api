@@ -34,7 +34,6 @@ public class UserByParamInDto implements UserInDto{
         return citizenshipCode;
     }
 
-    //Можно ли в данной ситуации вернуть null?
     @Override
     public String getDocName() {
         return null;

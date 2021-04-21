@@ -38,7 +38,7 @@ public interface OfficeDao {
      *
      * @param office офис
      */
-    void updateOffice(Office office);
+    void updateOffice(Office office,Integer id);
 
     /**
      * Добавление нового офиса

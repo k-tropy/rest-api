@@ -37,7 +37,7 @@ public interface OrganizationDao {
      *
      * @param organization организация
      */
-    void updateOrganization(Organization organization);
+    void updateOrganization(Organization organization, Integer id);
 
     /**
      * Добавление новой организации

@@ -19,7 +19,7 @@ public interface UserDao {
     /**
      * Получить список сотрудников по заданным параметрам
      *
-     * @param user известные параметры для поиска
+     * @param userIn известные параметры для поиска
      * @return List<Office> список офисов
      */
     List<User> loadUsersByParam(User userIn);
@@ -37,13 +37,13 @@ public interface UserDao {
      *
      * @param user пользователь
      */
-    void updateUser(User user);
+    void updateUser(User user, Integer id, Integer officeId);
 
     /**
      * Добавление нового пользователя
      *
      * @param user
      */
-    void saveUser(User user);
+    void saveUser(User user, Integer officeId);
 
 }

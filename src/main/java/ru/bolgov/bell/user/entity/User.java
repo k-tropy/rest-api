@@ -4,7 +4,6 @@ import ru.bolgov.bell.doc.entity.Doc;
 import ru.bolgov.bell.office.entity.Office;
 import ru.bolgov.bell.guide.entity.Citizenship;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -92,17 +91,12 @@ public class User {
     /**
      * Документ удостоверяющий личность пользователя
      */
-    //@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doc_id")
     private Doc doc;
 
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id){
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -177,20 +171,4 @@ public class User {
         this.doc = doc;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", version=" + version +
-                ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", middleName='" + middleName + '\'' +
-                ", position='" + position + '\'' +
-                ", phone='" + phone + '\'' +
-                ", isIdentified=" + isIdentified +
-                ", office=" + office +
-                ", citizenship=" + citizenship +
-                ", doc=" + doc +
-                '}';
-    }
 }

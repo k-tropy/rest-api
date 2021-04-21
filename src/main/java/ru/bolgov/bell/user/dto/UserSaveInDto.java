@@ -31,7 +31,6 @@ public class UserSaveInDto implements UserInDto{
 
     @Override
     public Integer getDocCode() {
-        System.out.println("Вызвали DocCode в правильном месте");
         return docCode;
     }
 
@@ -55,21 +54,4 @@ public class UserSaveInDto implements UserInDto{
         return citizenshipCode;
     }
 
-    @Override
-    public String toString() {
-        return "UserSaveInDto{" +
-                "officeId=" + officeId +
-                ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", middleName='" + middleName + '\'' +
-                ", position='" + position + '\'' +
-                ", phone='" + phone + '\'' +
-                ", docName='" + docName + '\'' +
-                ", docNumber='" + docNumber + '\'' +
-                ", docCode=" + docCode +
-                ", docDate=" + docDate +
-                ", citizenshipCode=" + citizenshipCode +
-                ", isIdentified=" + isIdentified +
-                '}';
-    }
 }

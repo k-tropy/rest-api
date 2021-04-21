@@ -47,6 +47,9 @@ public class UserServiceImpl implements UserService{
         return mapper.mapAsList(users, UserByParamOutDto.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public UserByIdOutDto userById(Integer userID) {
@@ -54,19 +57,26 @@ public class UserServiceImpl implements UserService{
         return mapper.mapUserToOutDto(user, UserByIdOutDto.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void userUpdate(@Valid UserUpdateInDto userIn) {
-        System.out.println("ID юзера до маппера: " + userIn);
         User user = mapper.mapUserInDtoToUser(userIn, User.class);
-        System.out.println("ID юзера после маппера: " + user);
-        dao.updateUser(user);
+        Integer id = userIn.id;
+        Integer officeId = userIn.officeId;
+        dao.updateUser(user, id, officeId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void userSave(@Valid UserSaveInDto userIn) {
         User user = mapper.mapUserInDtoToUser(userIn, User.class);
-        dao.saveUser(user);
+        Integer officeId = userIn.officeId;
+        dao.saveUser(user, officeId);
     }
 }

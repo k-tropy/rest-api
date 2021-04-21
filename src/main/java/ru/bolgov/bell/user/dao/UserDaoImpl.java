@@ -47,13 +47,10 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public List<User> loadUsersByParam(User userIn) {
-        System.out.println(userIn.toString());
         CriteriaQuery<User> criteria = buildCriteria(userIn);
         TypedQuery<User> query = em.createQuery(criteria);
         return query.getResultList();
     }
-
-    //Делает три select отдельно. Стоит переписать на скачивание всей информации ч/з один select
 
     /**
      * {@inheritDoc}
@@ -67,19 +64,18 @@ public class UserDaoImpl implements UserDao {
      * {@inheritDoc}
      */
     @Override
-    public void updateUser(User userNew) {
-        System.out.println("Id нового юзера: " + userNew.getId());
-        User userOld = loadUserById(userNew.getId());
-        changeFieldValues(userNew, userOld);
+    public void updateUser(User userNew, Integer id, Integer officeId) {
+        User userOld = loadUserById(id);
+        changeFieldValues(userNew, userOld, officeId);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void saveUser(User user) {
+    public void saveUser(User user, Integer officeId) {
+
         Doc doc = null;
-//Не смог реализовать корректно только на нативном SQL. Не нашел способ из H2 получить id сохранённой записи
         if (user.getDoc() != null) {
             doc = new Doc();
             doc.setNumber(user.getDoc().getNumber());
@@ -95,7 +91,7 @@ public class UserDaoImpl implements UserDao {
                 + "(version, office_id, first_name, second_name, middle_name, position, phone, is_identified, citizenship_code, doc_id) "
                 + "VALUES (0,:office_id, :first_name, :second_name, :middle_name, :position, :phone, :is_identified, :citizenship_code, :doc_id) ";
         Query query = em.createNativeQuery(queryStringUser);
-        query.setParameter("office_id", user.getOffice().getId());
+        query.setParameter("office_id", officeId);
         query.setParameter("first_name", user.getFirstName());
         query.setParameter("second_name", user.getSecondName());
         query.setParameter("middle_name", user.getMiddleName());
@@ -104,6 +100,8 @@ public class UserDaoImpl implements UserDao {
         query.setParameter("is_identified", user.getIsIdentified());
         query.setParameter("citizenship_code", user.getCitizenship() == null ? null : user.getCitizenship().getCode());
         query.setParameter("doc_id", doc == null ? null : doc.getId());
+        query.executeUpdate();
+
     }
 
     private CriteriaQuery<User> buildCriteria(User userIn) {
@@ -147,8 +145,7 @@ public class UserDaoImpl implements UserDao {
         return criteria.where(mainPredicate);
     }
 
-
-    private void changeFieldValues(User userNew, User userOld) {
+    private void changeFieldValues(User userNew, User userOld, Integer officeId) {
         if (userNew != null && userOld != null) {
             userOld.setFirstName(userNew.getFirstName());
             userOld.setPosition(userNew.getPosition());
@@ -173,9 +170,8 @@ public class UserDaoImpl implements UserDao {
                 userOld.setIsIdentified(isIdentifiedNew);
             }
 
-            Office officeNew = userNew.getOffice();
-            if (officeNew != null) {
-                officeNew = em.find(Office.class, officeNew.getId());
+            if (officeId != null) {
+                Office officeNew = em.find(Office.class, officeId);
                 userOld.setOffice(officeNew);
             }
 

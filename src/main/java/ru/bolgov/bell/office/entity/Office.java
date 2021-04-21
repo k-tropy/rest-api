@@ -70,10 +70,6 @@ public class Office {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -114,16 +110,4 @@ public class Office {
         this.organization = organization;
     }
 
-    @Override
-    public String toString() {
-        return "Office{" +
-                "id=" + id +
-                ", version=" + version +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", isActive=" + isActive +
-                ", organization=" + organization +
-                '}';
-    }
 }

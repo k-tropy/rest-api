@@ -58,13 +58,12 @@ public class OfficeDaoImpl implements OfficeDao {
      * {@inheritDoc}
      */
     @Override
-    public void updateOffice(Office officeNew) {
-        Office officeOld = em.find(Office.class, officeNew.getId());
+    public void updateOffice(Office officeNew, Integer id) {
+        Office officeOld = em.find(Office.class, id);
         changeFieldValues(officeNew, officeOld);
-        em.persist(officeOld);//добавил персист. Проверить работу метода
+        em.persist(officeOld);
     }
 
-    //Можно сохранить через персист но тогда нужно делать дополнительный запрос в БД для скачивания информации о организации. Или можно иначе сделать?
     /**
      * {@inheritDoc}
      */

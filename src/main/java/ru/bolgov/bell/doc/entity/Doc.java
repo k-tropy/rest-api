@@ -41,10 +41,6 @@ public class Doc {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public DocType getDocType() {
         return docType;
     }

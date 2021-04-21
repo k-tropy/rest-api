@@ -19,7 +19,6 @@ public class OfficeNewDto implements OfficeDtoWithOrgId{
 
     public Boolean isActive;
 
-
     @Override
     public Integer getOrgId() {
         return orgId;

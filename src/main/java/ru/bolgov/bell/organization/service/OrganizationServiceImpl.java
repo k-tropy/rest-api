@@ -28,8 +28,6 @@ public class OrganizationServiceImpl implements OrganizationService {
         this.mapper = mapper;
     }
 
-    // TODO разобраться с     @Transactional(readOnly = true)
-
     /**
      * {@inheritDoc}
      */
@@ -62,15 +60,15 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     }
 
-//todo Разобраться как получать информацию назад? Успешно или не успешно прошло...По всей видимости это будет хандлер
     /**
      * {@inheritDoc}
      */
     @Override
     @Transactional
     public void updateOrganization(@Valid OrganizationFullDto organizationInDto) {
+        Integer id = organizationInDto.id;
         Organization organizationIn = mapper.map(organizationInDto, Organization.class);
-        dao.updateOrganization(organizationIn);
+        dao.updateOrganization(organizationIn, id);
     }
 
     /**

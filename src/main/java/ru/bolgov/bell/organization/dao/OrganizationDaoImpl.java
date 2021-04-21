@@ -58,8 +58,8 @@ public class OrganizationDaoImpl implements OrganizationDao {
      * {@inheritDoc}
      */
     @Override
-    public void updateOrganization(Organization organizationNew) {
-        Organization organizationOld = em.find(Organization.class, organizationNew.getId());
+    public void updateOrganization(Organization organizationNew, Integer id) {
+        Organization organizationOld = em.find(Organization.class, id);
         сhangeFieldValues(organizationNew, organizationOld);
     }
 

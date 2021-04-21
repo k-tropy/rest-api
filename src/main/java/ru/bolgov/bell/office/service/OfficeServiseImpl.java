@@ -28,7 +28,6 @@ public class OfficeServiseImpl implements OfficeService{
         this.mapper = mapper;
     }
 
-    //todo мне не нравится реализация!!!Как это сделать правильно? Мапер может это делать автоматически?
     /**
      * {@inheritDoc}
      */
@@ -57,7 +56,8 @@ public class OfficeServiseImpl implements OfficeService{
     @Transactional
     public void updateOffice(@Valid OfficeInfoDto officeInDto) {
         Office officeIn = mapper.map(officeInDto, Office.class);
-        dao.updateOffice(officeIn);
+        Integer id = officeInDto.id;
+        dao.updateOffice(officeIn, id);
     }
 
     /**
