@@ -1,8 +1,10 @@
 package ru.bolgov.bell.mapper;
 
-import ru.bolgov.bell.office.dto.OfficeByParamInDto;
 import ru.bolgov.bell.office.dto.OfficeDtoWithOrgId;
 import ru.bolgov.bell.office.entity.Office;
+import ru.bolgov.bell.user.dto.UserByIdOutDto;
+import ru.bolgov.bell.user.dto.UserInDto;
+import ru.bolgov.bell.user.entity.User;
 
 import java.util.List;
 
@@ -44,7 +46,7 @@ public interface MapperFacade {
     <S, D> List<D> mapAsList(Iterable<S> source, Class<D> destinationClass);
 
     /**
-     * Кастомный мапер для преобразования данных из DTO c полем orgId в DAO office
+     * Кастомный мапер для преобразования данных из DTO c полем orgId в Office
      * Для DTO реализующих интерфейс OfficeDtoWithOrgId
      *
      * @param sourse
@@ -52,4 +54,23 @@ public interface MapperFacade {
      * @return
      */
      Office  mapOfficeDtoWhithOrganization(OfficeDtoWithOrgId sourse, Class<Office> destinationClass);
+
+    /**
+     * Кастомный маппер для преобразования данны из DTO реалтзующих интерфейс UserInDto
+     * в User
+     *
+     * @param sourse
+     * @param destinationClass
+     * @return
+     */
+     User mapUserInDtoToUser(UserInDto sourse, Class<User> destinationClass);
+
+    /**
+     * Маппер для преобразования User в DTO для вывода результата
+     *
+     * @param sourse
+     * @param destinationClass
+     * @return
+     */
+     UserByIdOutDto mapUserToOutDto(User sourse, Class<UserByIdOutDto> destinationClass);
 }

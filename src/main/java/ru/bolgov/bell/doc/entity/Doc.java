@@ -1,7 +1,6 @@
 package ru.bolgov.bell.doc.entity;
 
 import ru.bolgov.bell.guide.entity.DocType;
-import ru.bolgov.bell.user.entity.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,6 +13,7 @@ public class Doc {
      * Идентификатор
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
@@ -36,19 +36,6 @@ public class Doc {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "code", nullable = false)
     private DocType docType;
-
-    /**
-     * Пользователь, которому принадлежит документ
-     */
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    private User user;
-
-    /**
-     * Пустой конструктор для Hibernate
-     */
-    public Doc() {
-    }
 
     public Integer getId() {
         return id;

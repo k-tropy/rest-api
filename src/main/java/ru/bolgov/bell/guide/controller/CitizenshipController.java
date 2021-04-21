@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bolgov.bell.guide.entity.Citizenship;
 import ru.bolgov.bell.guide.service.CitizenshipService;
 
-import java.util.List;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**

@@ -67,7 +67,6 @@ public class OfficeServiseImpl implements OfficeService{
     @Transactional
     public void saveOffice(@Valid OfficeNewDto officeInDto) {
         Office officeIn = mapper.mapOfficeDtoWhithOrganization(officeInDto, Office.class);
-        System.out.println(officeIn.toString());
         dao.saveOffice(officeIn);
     }
 }

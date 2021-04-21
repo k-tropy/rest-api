@@ -92,11 +92,17 @@ public class User {
     /**
      * Документ удостоверяющий личность пользователя
      */
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doc_id")
     private Doc doc;
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id){
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -143,7 +149,7 @@ public class User {
         return isIdentified;
     }
 
-    public void setIdentified(boolean identified) {
+    public void setIsIdentified(boolean identified) {
         isIdentified = identified;
     }
 
@@ -169,5 +175,22 @@ public class User {
 
     public void setDoc(Doc doc) {
         this.doc = doc;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", version=" + version +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", position='" + position + '\'' +
+                ", phone='" + phone + '\'' +
+                ", isIdentified=" + isIdentified +
+                ", office=" + office +
+                ", citizenship=" + citizenship +
+                ", doc=" + doc +
+                '}';
     }
 }

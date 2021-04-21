@@ -37,9 +37,9 @@ CREATE TABLE IF NOT EXISTS User (
 
 CREATE TABLE IF NOT EXISTS Doc (
     id     INTEGER              COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
-    code   INTEGER     NOT NULL COMMENT 'Код документа',
-    number VARCHAR(50) NOT NULL COMMENT 'Номер документа',
-    date   DATE        NOT NULL COMMENT 'Дата документа',
+    code   INTEGER              COMMENT 'Код документа',
+    number VARCHAR(50)          COMMENT 'Номер документа',
+    date   DATE                 COMMENT 'Дата документа',
 );
 
 CREATE TABLE IF NOT EXISTS Doc_type (

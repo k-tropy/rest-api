@@ -36,8 +36,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Transactional(readOnly = true)
     public List<OrganizationFullDto> organizations() {
-        List<Organization> organizationsList = dao.loadAllOrganizations();
-        return mapper.mapAsList(organizationsList, OrganizationFullDto.class);
+        List<Organization> organizations = dao.loadAllOrganizations();
+        return mapper.mapAsList(organizations, OrganizationFullDto.class);
     }
 
     /**

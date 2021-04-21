@@ -61,9 +61,10 @@ public class OfficeDaoImpl implements OfficeDao {
     public void updateOffice(Office officeNew) {
         Office officeOld = em.find(Office.class, officeNew.getId());
         changeFieldValues(officeNew, officeOld);
+        em.persist(officeOld);//добавил персист. Проверить работу метода
     }
 
-    //Можно сохранить через персист но тогда будет дополнительный запрос в БД для скачивания информации о организации. Или можно иначе сделать?
+    //Можно сохранить через персист но тогда нужно делать дополнительный запрос в БД для скачивания информации о организации. Или можно иначе сделать?
     /**
      * {@inheritDoc}
      */
@@ -77,8 +78,7 @@ public class OfficeDaoImpl implements OfficeDao {
         query.setParameter(4, office.getPhone());
         query.setParameter(5, office.getIsActive());
         query.executeUpdate();
-        //em.persist(office); - просто запросить организацию по ID и всё заработает!!!
-    }
+     }
 
     private CriteriaQuery<Office> buildCriteria(Office officeIn) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
