@@ -22,7 +22,7 @@ public interface UserDao {
      * @param userIn известные параметры для поиска
      * @return List<Office> список офисов
      */
-    List<User> loadUsersByParam(User userIn);
+    List<User> loadUsersByParam(User userIn, Integer officeId);
 
     /**
      * Получить пользователя по ID

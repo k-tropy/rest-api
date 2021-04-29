@@ -1,5 +1,6 @@
 package ru.bolgov.bell.user.dao;
 
+import jdk.nashorn.internal.runtime.options.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.bolgov.bell.doc.entity.Doc;
@@ -7,6 +8,8 @@ import ru.bolgov.bell.guide.entity.Citizenship;
 import ru.bolgov.bell.guide.entity.DocType;
 import ru.bolgov.bell.office.entity.Office;
 import ru.bolgov.bell.user.entity.User;
+import ru.bolgov.bell.utils.exception.EntityNotFoundException;
+import ru.bolgov.bell.utils.exception.NullArgumentException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +21,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * {@inheritDoc}
@@ -46,10 +50,17 @@ public class UserDaoImpl implements UserDao {
      * {@inheritDoc}
      */
     @Override
-    public List<User> loadUsersByParam(User userIn) {
-        CriteriaQuery<User> criteria = buildCriteria(userIn);
+    public List<User> loadUsersByParam(User userIn, Integer officeId) {
+        if (userIn == null || officeId == null) {
+            throw new NullArgumentException();
+        }
+        CriteriaQuery<User> criteria = buildCriteria(userIn, officeId);
         TypedQuery<User> query = em.createQuery(criteria);
-        return query.getResultList();
+        List<User> users = query.getResultList();
+        if (users.isEmpty()) {
+            throw new EntityNotFoundException("Пользователей по заданным параметрам не найдено");
+        }
+        return users;
     }
 
     /**
@@ -57,7 +68,11 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public User loadUserById(Integer userId) {
-        return em.find(User.class, userId);
+        if (userId == null) {
+            throw new NullArgumentException();
+        }
+        Optional<User> result = Optional.ofNullable(em.find(User.class, userId));
+        return result.orElseThrow(() -> new EntityNotFoundException("Пользователь не найден id=" + userId));
     }
 
     /**
@@ -65,8 +80,12 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void updateUser(User userNew, Integer id, Integer officeId) {
+        if (userNew == null || id == null) {
+            throw new NullArgumentException();
+        }
         User userOld = loadUserById(id);
         changeFieldValues(userNew, userOld, officeId);
+        em.persist(userOld);
     }
 
     /**
@@ -74,6 +93,9 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void saveUser(User user, Integer officeId) {
+        if (user == null || officeId == null) {
+            throw new NullArgumentException();
+        }
 
         Doc doc = null;
         if (user.getDoc() != null) {
@@ -81,8 +103,10 @@ public class UserDaoImpl implements UserDao {
             doc.setNumber(user.getDoc().getNumber());
             doc.setDate(user.getDoc().getDate());
             if (user.getDoc().getDocType() != null) {
-                DocType docType = em.find(DocType.class, user.getDoc().getDocType().getCode());
-                doc.setDocType(docType);
+                Integer docCode = user.getDoc().getDocType().getCode();
+                Optional<DocType> docTypeOptional = Optional.ofNullable(em.find(DocType.class, docCode));
+                doc.setDocType(docTypeOptional.orElseThrow(() ->
+                        new EntityNotFoundException("Такой тип документа не найден. Код документа:" + docCode)));
             }
             em.persist(doc);
         }
@@ -104,12 +128,11 @@ public class UserDaoImpl implements UserDao {
 
     }
 
-    private CriteriaQuery<User> buildCriteria(User userIn) {
+    private CriteriaQuery<User> buildCriteria(User userIn, Integer officeId) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
         Root<User> userRoot = criteria.from(User.class);
-
-        Predicate mainPredicate = builder.equal(userRoot.get("office").get("id"), userIn.getOffice().getId());
+        Predicate mainPredicate = builder.equal(userRoot.get("office").get("id"), officeId);
         if (userIn.getFirstName() != null) {
             Predicate predicate = builder.equal(userRoot.get("firstName"), userIn.getFirstName());
             mainPredicate = builder.and(mainPredicate, predicate);
@@ -146,53 +169,27 @@ public class UserDaoImpl implements UserDao {
     }
 
     private void changeFieldValues(User userNew, User userOld, Integer officeId) {
-        if (userNew != null && userOld != null) {
-            userOld.setFirstName(userNew.getFirstName());
-            userOld.setPosition(userNew.getPosition());
-
-            String secondNameNew = userNew.getSecondName();
-            if (secondNameNew != null) {
-                userOld.setSecondName(secondNameNew);
-            }
-
-            String middleNameNew = userNew.getMiddleName();
-            if (middleNameNew != null) {
-                userOld.setMiddleName(middleNameNew);
-            }
-
-            String phoneNew = userNew.getPhone();
-            if (phoneNew != null) {
-                userOld.setPhone(phoneNew);
-            }
-
-            Boolean isIdentifiedNew = userNew.getIsIdentified();
-            if (isIdentifiedNew != null) {
-                userOld.setIsIdentified(isIdentifiedNew);
-            }
-
-            if (officeId != null) {
-                Office officeNew = em.find(Office.class, officeId);
-                userOld.setOffice(officeNew);
-            }
-
-            Citizenship citizenshipNew = userNew.getCitizenship();
-            if (citizenshipNew != null) {
-                citizenshipNew = em.find(Citizenship.class, citizenshipNew.getCode());
-                userOld.setCitizenship(citizenshipNew);
-            }
-
-            if (userNew.getDoc() != null) {
-                String docNumber = userNew.getDoc().getNumber();
-                if (docNumber != null) {
-                    userOld.getDoc().setNumber(docNumber);
-                }
-
-                Date docDate = userNew.getDoc().getDate();
-                if (docDate != null) {
-                    userOld.getDoc().setDate(docDate);
-                }
-            }
+        userOld.setFirstName(userNew.getFirstName());
+        userOld.setPosition(userNew.getPosition());
+        Optional.ofNullable(userNew.getSecondName()).ifPresent(secondNameNew -> userOld.setSecondName(secondNameNew));
+        Optional.ofNullable(userNew.getMiddleName()).ifPresent(middleNameNew -> userOld.setMiddleName(middleNameNew));
+        Optional.ofNullable(userNew.getPhone()).ifPresent(phoneNew -> userOld.setPhone(phoneNew));
+        Optional.ofNullable(userNew.getIsIdentified()).ifPresent(isIdentifiedNew -> userOld.setIsIdentified(isIdentifiedNew));
+        if (userNew.getDoc() != null) {
+            Optional.ofNullable(userNew.getDoc().getNumber()).ifPresent(docNumber -> userOld.getDoc().setNumber(docNumber));
+            Optional.ofNullable(userNew.getDoc().getDate()).ifPresent(docDate -> userOld.getDoc().setDate(docDate));
         }
+        if (officeId != null) {
+            Optional<Office> officeNewOptional = Optional.ofNullable(em.find(Office.class, officeId));
+            userOld.setOffice(officeNewOptional.orElseThrow(() -> new EntityNotFoundException("Офис с таким id не найден. id=" + officeId)));
+        }
+        if (userNew.getCitizenship() != null) {
+            Integer code = userNew.getCitizenship().getCode();
+            Optional<Citizenship> citizenshipNew = Optional.ofNullable(em.find(Citizenship.class, code));
+            userOld.setCitizenship(citizenshipNew.orElseThrow(() -> new EntityNotFoundException("Гражданство с таким кодом не найдено code=" + code)));
+        }
+
+
     }
 }
 

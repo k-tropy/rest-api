@@ -1,4 +1,4 @@
-package ru.bolgov.bell.mapper;
+package ru.bolgov.bell.utils.mapper;
 
 import ma.glasnost.orika.MapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import ru.bolgov.bell.user.dto.UserInDto;
 import ru.bolgov.bell.user.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * {@inheritDoc}

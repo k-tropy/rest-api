@@ -20,26 +20,49 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class OfficeController {
     private final OfficeService service;
 
+
     @Autowired
     public OfficeController(OfficeService service) {
         this.service = service;
     }
 
+    /**
+     * Получение списка организаций по параметрам
+     *
+     * @param parameters
+     * @return
+     */
     @PostMapping("/list")
     public List<OfficeByParamOutDto> byParam (@RequestBody OfficeByParamInDto parameters){
         return service.officesFilter(parameters);
     }
 
+    /**
+     * Получение организации по ID
+     *
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public OfficeInfoDto byId(@PathVariable Integer id){
         return service.officeById(id);
     }
 
+    /**
+     * Обновление организации
+     *
+     * @param parameters
+     */
     @PostMapping("/update")
     public void update(@RequestBody OfficeInfoDto parameters){
         service.updateOffice(parameters);
     }
 
+    /**
+     * Сохранение новой организации
+     *
+     * @param parametrs
+     */
     @PostMapping("/save")
     public void save(@RequestBody OfficeNewDto parametrs){
         service.saveOffice(parametrs);

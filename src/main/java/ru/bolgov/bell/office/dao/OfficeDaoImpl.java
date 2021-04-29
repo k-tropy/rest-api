@@ -3,6 +3,8 @@ package ru.bolgov.bell.office.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.bolgov.bell.office.entity.Office;
+import ru.bolgov.bell.utils.exception.EntityNotFoundException;
+import ru.bolgov.bell.utils.exception.NullArgumentException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -12,6 +14,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * {@inheritDoc}
@@ -41,9 +44,16 @@ public class OfficeDaoImpl implements OfficeDao {
      */
     @Override
     public List<Office> loadOfficesByParam(Office officeIn) {
+        if (officeIn == null) {
+            throw new NullArgumentException();
+        }
         CriteriaQuery<Office> criteria = buildCriteria(officeIn);
         TypedQuery<Office> query = em.createQuery(criteria);
-        return query.getResultList();
+        List<Office> result = query.getResultList();
+        if (result.isEmpty()) {
+            throw new EntityNotFoundException("Офисы по заданным параметрам не найдены.");
+        }
+        return result;
     }
 
     /**
@@ -51,7 +61,11 @@ public class OfficeDaoImpl implements OfficeDao {
      */
     @Override
     public Office loadOfficeById(Integer officeId) {
-        return em.find(Office.class, officeId);
+        if (officeId == null) {
+            throw new NullArgumentException();
+        }
+        Optional<Office> result = Optional.ofNullable(em.find(Office.class, officeId));
+        return result.orElseThrow(() -> new EntityNotFoundException("Не удалось найти офис id=" + officeId));
     }
 
     /**
@@ -59,9 +73,19 @@ public class OfficeDaoImpl implements OfficeDao {
      */
     @Override
     public void updateOffice(Office officeNew, Integer id) {
-        Office officeOld = em.find(Office.class, id);
-        changeFieldValues(officeNew, officeOld);
-        em.persist(officeOld);
+        if (officeNew == null || id == null) {
+            throw new NullArgumentException();
+        }
+
+        Optional<Office> officeOld = Optional.ofNullable(em.find(Office.class, id));
+        officeOld.ifPresent(v -> {
+            changeFieldValues(officeNew, v);
+            em.persist(v);
+        });
+
+        if (!officeOld.isPresent()) {
+            throw new EntityNotFoundException("Не удалось найти офис id=" + id);
+        }
     }
 
     /**
@@ -69,6 +93,9 @@ public class OfficeDaoImpl implements OfficeDao {
      */
     @Override
     public void saveOffice(Office office) {
+        if (office==null){
+            throw new NullArgumentException();
+        }
         String queryString = "INSERT INTO office(version, org_id, name, address, phone, is_active) VALUES (0,?,?,?,?,?)";
         Query query = em.createNativeQuery(queryString);
         query.setParameter(1, office.getOrganization().getId());
@@ -77,7 +104,7 @@ public class OfficeDaoImpl implements OfficeDao {
         query.setParameter(4, office.getPhone());
         query.setParameter(5, office.getIsActive());
         query.executeUpdate();
-     }
+    }
 
     private CriteriaQuery<Office> buildCriteria(Office officeIn) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
@@ -101,18 +128,14 @@ public class OfficeDaoImpl implements OfficeDao {
     }
 
     private void changeFieldValues(Office officeNew, Office officeOld) {
-        if (officeNew != null && officeOld != null) {
-            officeOld.setName(officeNew.getName());
-            officeOld.setAddress(officeNew.getAddress());
+        officeOld.setName(officeNew.getName());
+        officeOld.setAddress(officeNew.getAddress());
 
-            String phoneNew = officeNew.getPhone();
-            if (phoneNew != null) {
-                officeOld.setPhone(phoneNew);
-            }
-            Boolean isActiveNew = officeNew.getIsActive();
-            if (isActiveNew != null) {
-                officeOld.setIsActive(isActiveNew);
-            }
-        }
+        Optional.ofNullable(officeNew.getPhone())
+                .ifPresent(phoneNew -> officeOld.setPhone(phoneNew));
+
+        Optional.ofNullable(officeNew.getIsActive())
+                .ifPresent(isActiveNew -> officeOld.setIsActive(isActiveNew));
+
     }
 }

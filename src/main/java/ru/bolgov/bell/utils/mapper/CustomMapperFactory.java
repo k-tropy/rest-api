@@ -1,4 +1,4 @@
-package ru.bolgov.bell.mapper;
+package ru.bolgov.bell.utils.mapper;
 
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;

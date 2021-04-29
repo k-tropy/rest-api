@@ -1,4 +1,4 @@
-package ru.bolgov.bell.mapper;
+package ru.bolgov.bell.utils.mapper;
 
 import ru.bolgov.bell.office.dto.OfficeDtoWithOrgId;
 import ru.bolgov.bell.office.entity.Office;

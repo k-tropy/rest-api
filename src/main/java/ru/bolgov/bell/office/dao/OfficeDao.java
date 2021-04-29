@@ -1,7 +1,6 @@
 package ru.bolgov.bell.office.dao;
 
 import ru.bolgov.bell.office.entity.Office;
-import ru.bolgov.bell.organization.entity.Organization;
 
 import java.util.List;
 

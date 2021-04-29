@@ -4,6 +4,8 @@ import ru.bolgov.bell.organization.entity.Organization;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.bolgov.bell.utils.exception.EntityNotFoundException;
+import ru.bolgov.bell.utils.exception.NullArgumentException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -12,6 +14,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * {@inheritDoc}
@@ -41,9 +44,17 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public List<Organization> loadOrganizationsByParam(Organization organizationIn) {
+        if (organizationIn == null) {
+            throw new NullArgumentException();
+        }
+
         CriteriaQuery<Organization> criteria = buildCriteria(organizationIn);
         TypedQuery<Organization> query = em.createQuery(criteria);
-        return query.getResultList();
+        List<Organization> result = query.getResultList();
+        if (result.isEmpty()) {
+            throw new EntityNotFoundException("Нет результатов по вашему запросу. Попробуйте изменить параметры");
+        }
+        return result;
     }
 
     /**
@@ -51,7 +62,11 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public Organization loadOrganizationById(Integer organizationId) {
-        return em.find(Organization.class, organizationId);
+        if (organizationId == null) {
+            throw new NullArgumentException();
+        }
+        Optional<Organization> result = Optional.ofNullable(em.find(Organization.class, organizationId));
+        return result.orElseThrow(() -> new EntityNotFoundException("Нет результатов для id=" + organizationId));
     }
 
     /**
@@ -59,8 +74,14 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public void updateOrganization(Organization organizationNew, Integer id) {
-        Organization organizationOld = em.find(Organization.class, id);
-        сhangeFieldValues(organizationNew, organizationOld);
+        if (organizationNew == null || id == null) {
+            throw new NullArgumentException();
+        }
+        Optional<Organization> organizationOld = Optional.ofNullable(em.find(Organization.class, id));
+        сhangeFieldValues(organizationNew,
+                organizationOld.orElseThrow(() -> new EntityNotFoundException("Организация id=" + id + " не найдена; ")));
+        organizationOld.ifPresent(v -> em.persist(v));
+
     }
 
     /**
@@ -68,6 +89,9 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
     @Override
     public void saveOrganization(Organization organization) {
+        if (organization == null) {
+            throw new NullArgumentException();
+        }
         em.persist(organization);
     }
 
@@ -90,22 +114,17 @@ public class OrganizationDaoImpl implements OrganizationDao {
     }
 
     private void сhangeFieldValues(Organization organizationNew, Organization organizationOld) {
-        if (organizationNew != null && organizationOld != null) {
-            organizationOld.setName(organizationNew.getName());
-            organizationOld.setFullName(organizationNew.getFullName());
-            organizationOld.setInn(organizationNew.getInn());
-            organizationOld.setKpp(organizationNew.getKpp());
-            organizationOld.setAddress(organizationNew.getAddress());
+        organizationOld.setName(organizationNew.getName());
+        organizationOld.setFullName(organizationNew.getFullName());
+        organizationOld.setInn(organizationNew.getInn());
+        organizationOld.setKpp(organizationNew.getKpp());
+        organizationOld.setAddress(organizationNew.getAddress());
 
-            String phoneNew = organizationNew.getPhone();
-            if (phoneNew != null) {
-                organizationOld.setPhone(phoneNew);
-            }
-            Boolean isActiveNew = organizationNew.getIsActive();
-            if (isActiveNew != null) {
-                organizationOld.setIsActive(isActiveNew);
-            }
+        Optional.ofNullable(organizationNew.getPhone())
+                .ifPresent(phoneNew -> organizationOld.setPhone(phoneNew));
 
-        }
+        Optional.ofNullable(organizationNew.getIsActive())
+                .ifPresent(isActiveNew -> organizationOld.setIsActive(isActiveNew));
+
     }
 }

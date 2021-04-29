@@ -3,11 +3,12 @@ package ru.bolgov.bell.user.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bolgov.bell.mapper.MapperFacade;
+import ru.bolgov.bell.utils.mapper.MapperFacade;
 import ru.bolgov.bell.user.dao.UserDao;
 import ru.bolgov.bell.user.dto.*;
 import ru.bolgov.bell.user.entity.User;
 
+import javax.crypto.spec.PSource;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public List<UserByParamOutDto> usersFilter(@Valid UserByParamInDto filterInDto) {
         User parameters = mapper.mapUserInDtoToUser(filterInDto, User.class);
-        List<User> users = dao.loadUsersByParam(parameters);
+        List<User> users = dao.loadUsersByParam(parameters,filterInDto.officeId);
         return mapper.mapAsList(users, UserByParamOutDto.class);
     }
 

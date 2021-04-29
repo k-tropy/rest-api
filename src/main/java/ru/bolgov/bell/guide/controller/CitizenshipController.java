@@ -22,6 +22,11 @@ public class CitizenshipController {
         this.service = service;
     }
 
+    /**
+     * Получение перечня гражданств
+     *
+     * @return
+     */
     @PostMapping
     public Iterable<Citizenship> all(){
         return service.all();

@@ -3,7 +3,7 @@ package ru.bolgov.bell.organization.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bolgov.bell.mapper.MapperFacade;
+import ru.bolgov.bell.utils.mapper.MapperFacade;
 import ru.bolgov.bell.organization.dao.OrganizationDao;
 import ru.bolgov.bell.organization.dto.OrganizationByParamInDto;
 import ru.bolgov.bell.organization.dto.OrganizationByParamOutDto;

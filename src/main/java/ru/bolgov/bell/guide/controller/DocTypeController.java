@@ -20,6 +20,11 @@ public class DocTypeController {
         this.service = service;
     }
 
+    /**
+     * Получения перечня всех типов документов в справочнике
+     *
+     * @return
+     */
     @PostMapping
     public Iterable<DocType> all(){
         return service.all();

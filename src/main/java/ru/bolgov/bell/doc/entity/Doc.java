@@ -5,6 +5,9 @@ import ru.bolgov.bell.guide.entity.DocType;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * Документ пользователя
+ */
 @Entity
 @Table(name = "Doc")
 public class Doc {

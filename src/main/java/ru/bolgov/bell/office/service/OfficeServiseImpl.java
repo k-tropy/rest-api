@@ -3,7 +3,7 @@ package ru.bolgov.bell.office.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bolgov.bell.mapper.MapperFacade;
+import ru.bolgov.bell.utils.mapper.MapperFacade;
 import ru.bolgov.bell.office.dao.OfficeDao;
 import ru.bolgov.bell.office.dto.OfficeByParamInDto;
 import ru.bolgov.bell.office.dto.OfficeByParamOutDto;
