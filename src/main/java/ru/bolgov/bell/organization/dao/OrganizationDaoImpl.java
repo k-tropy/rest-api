@@ -79,7 +79,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
         }
         Optional<Organization> organizationOld = Optional.ofNullable(em.find(Organization.class, id));
         сhangeFieldValues(organizationNew,
-                organizationOld.orElseThrow(() -> new EntityNotFoundException("Организация id=" + id + " не найдена; ")));
+                organizationOld.orElseThrow(() -> new EntityNotFoundException("Организация id=" + id + " не найдена")));
         organizationOld.ifPresent(v -> em.persist(v));
 
     }

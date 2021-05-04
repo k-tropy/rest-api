@@ -141,4 +141,19 @@ public class Organization {
     public void setIsActive(Boolean active) {
         isActive = active;
     }
+
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "id=" + id +
+                ", version=" + version +
+                ", name='" + name + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", inn='" + inn + '\'' +
+                ", kpp='" + kpp + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", isActive=" + isActive +
+                '}';
+    }
 }
